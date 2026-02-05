@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 
 
-@dataclass(slots=True, frozen=True)
+@dataclass(slots=True)
 class Customer:
-    id: int
     name: str
     address: str
+    id: int | None = None

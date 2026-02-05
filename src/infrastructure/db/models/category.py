@@ -15,6 +15,7 @@ class CategoryORM(BaseORM[Category], table=True):
     parent_id: int | None = Field(
         foreign_key="categories.id",
         nullable=True,
+        ondelete="CASCADE"
     )
 
     parent: CategoryORM | None = Relationship(
@@ -30,6 +31,8 @@ class CategoryORM(BaseORM[Category], table=True):
         sa_relationship=relationship(
             "CategoryORM",
             back_populates="parent",
+            cascade="all, delete-orphan",
+            passive_deletes=True,
             lazy="selectin",
         )
     )
