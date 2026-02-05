@@ -8,41 +8,91 @@ from src.infrastructure.db.uow import UnitOfWork
 
 CATEGORY_TREE: dict[str, dict] = {
     "Бытовая техника": {
-        "Стиральные машины": {},
+        "Стиральные машины": {
+            "Фронтальные": {},
+            "Вертикальные": {},
+        },
         "Холодильники": {
             "Однокамерные": {},
             "Двухкамерные": {},
+            "Side-by-Side": {},
         },
-        "Телевизоры": {},
+        "Телевизоры": {
+            "LED": {},
+            "OLED": {},
+            "QLED": {},
+        },
+        "Посудомоечные машины": {},
     },
     "Компьютеры": {
         "Ноутбуки": {
+            '13"': {},
+            '15"': {},
             '17"': {},
-            '19"': {},
         },
         "Моноблоки": {},
+        "Системные блоки": {
+            "Игровые": {},
+            "Офисные": {},
+        },
+    },
+    "Смартфоны и гаджеты": {
+        "Смартфоны": {
+            "Android": {},
+            "iOS": {},
+        },
+        "Планшеты": {},
+        "Умные часы": {},
     },
 }
 
 CUSTOMERS: list[Customer] = [
-    Customer(name="Иван Иванов", address="г. Москва, ул. Пушкина, д. Колотушкина"),
-    Customer(name="Пётр Петров", address="г. Санкт-Петербург, Невский пр., д. 1111"),
-    Customer(name="ООО Ромашка", address="г. Казань, ул. Кремлёвская, д. -1"),
+    Customer(
+        name="Иван Иванов",
+        address="г. Москва, ул. Пушкина, д. Колотушкина",
+    ),
+    Customer(
+        name="Пётр Петров",
+        address="г. Санкт-Петербург, Невский пр., д. 1111",
+    ),
+    Customer(
+        name="ООО Ромашка",
+        address="г. Казань, ул. Кремлёвская, д. -1",
+    ),
+    Customer(
+        name="ООО ТехноМир",
+        address="г. Екатеринбург, ул. Малышева, д. 42424242",
+    ),
+    Customer(
+        name="АО СеверСофт",
+        address="г. Новосибирск, Красный проспект, д. 01010",
+    ),
+    Customer(
+        name="Сидоров Сергей",
+        address="г. Самара, ул. Ленинградская, д. 77777",
+    ),
 ]
 
 PRODUCTS = [
     {
-        # https://www.dns-shop.ru/product/060c1f950c273332/stiralnaa-masina-lg-f1296hds3-belyj/
         "product": Product(
             name="Стиральная машина LG F1296HDS3 белый",
             quantity=130,
             price=37_999,
             category=None,
         ),
-        "category": "Стиральные машины",
+        "category": "Фронтальные",
     },
     {
-        # https://www.dns-shop.ru/product/13f1d50cf97b3330/holodilnik-s-morozilnikom-lg-ga-b509mqsl-belyj/
+        "product": Product(
+            name="Стиральная машина Bosch WLT24460OE",
+            quantity=42,
+            price=49_990,
+            category=None,
+        ),
+        "category": "Вертикальные",
+    },
+    {
         "product": Product(
             name="Холодильник с морозильником LG GA-B509MQSL белый",
             quantity=136,
@@ -52,14 +102,85 @@ PRODUCTS = [
         "category": "Двухкамерные",
     },
     {
-        # https://www.dns-shop.ru/product/4f2a1ba7713fed20/173-noutbuk-asus-tuf-gaming-f17-fx707zc4-hx014-seryj/
         "product": Product(
-            name='17.3" Ноутбук ASUS TUF Gaming F17 FX707ZC4-HX014 серый',
+            name="Холодильник Samsung RS63R5587SL",
+            quantity=27,
+            price=129_999,
+            category=None,
+        ),
+        "category": "Side-by-Side",
+    },
+    {
+        "product": Product(
+            name='55" Телевизор LG OLED55C2',
+            quantity=18,
+            price=149_999,
+            category=None,
+        ),
+        "category": "OLED",
+    },
+    {
+        "product": Product(
+            name='65" Телевизор Samsung QE65Q60AAU',
+            quantity=31,
+            price=99_999,
+            category=None,
+        ),
+        "category": "QLED",
+    },
+    {
+        "product": Product(
+            name='17.3" Ноутбук ASUS TUF Gaming F17',
             quantity=183,
             price=83_999,
             category=None,
         ),
         "category": '17"',
+    },
+    {
+        "product": Product(
+            name='15.6" Ноутбук Apple MacBook Pro M2',
+            quantity=24,
+            price=214_999,
+            category=None,
+        ),
+        "category": '15"',
+    },
+    {
+        "product": Product(
+            name="Игровой ПК Ryzen 7 / RTX 4070",
+            quantity=12,
+            price=189_999,
+            category=None,
+        ),
+        "category": "Игровые",
+    },
+    {
+        "product": Product(
+            name="Офисный ПК Intel i5 / 16GB RAM",
+            quantity=54,
+            price=64_999,
+            category=None,
+        ),
+        "category": "Офисные",
+    },
+    {
+        "product": Product(
+            name="Apple iPhone 15 Pro 256GB",
+            quantity=76,
+            price=149_999,
+            category=None,
+        ),
+        "category": "iOS",
+    },
+    {
+        "product": Product(
+            name="Samsung Galaxy S24 Ultra",
+            quantity=89,
+            price=139_999,
+            category=None,
+        ),
+        "category": "Android",
     },
 ]
 
@@ -91,6 +212,7 @@ async def create_category_tree(
         )
 
     return cache
+
 
 async def seed_initial_data():
     async with UnitOfWork() as uow:
