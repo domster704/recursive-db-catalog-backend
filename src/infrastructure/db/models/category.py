@@ -7,20 +7,25 @@ from src.domain.entities.category import Category
 from src.infrastructure.db.models import BaseORM
 
 
-class CategoryORM(BaseORM[Category]):
+class CategoryORM(BaseORM[Category], table=True):
     __tablename__ = "categories"
 
-    id: int = Field(primary_key=True, nullable=False)
+    id: int = Field(primary_key=True)
     name: str
-    parent_id: int | None = Field(foreign_key="categories.id")
+    parent_id: int | None = Field(
+        foreign_key="categories.id",
+        nullable=True,
+    )
 
     parent: CategoryORM | None = Relationship(
         sa_relationship=relationship(
             "CategoryORM",
+            remote_side=lambda: CategoryORM.id,
             back_populates="children",
-            lazy="selectin"
+            lazy="selectin",
         )
     )
+
     children: list[CategoryORM] = Relationship(
         sa_relationship=relationship(
             "CategoryORM",
@@ -28,6 +33,7 @@ class CategoryORM(BaseORM[Category]):
             lazy="selectin",
         )
     )
+
     products: list["ProductORM"] = Relationship(
         sa_relationship=relationship(
             "ProductORM",

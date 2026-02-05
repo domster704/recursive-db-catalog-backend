@@ -7,7 +7,7 @@ from src.domain.entities.customer import Customer
 from src.infrastructure.db.models import BaseORM
 
 
-class CustomerORM(BaseORM[Customer]):
+class CustomerORM(BaseORM[Customer], table=True):
     __tablename__ = "customers"
 
     id: int = Field(primary_key=True)

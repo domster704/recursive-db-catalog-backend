@@ -5,10 +5,9 @@ from sqlalchemy.orm import relationship
 
 from src.domain.entities.order_item import OrderItem
 from src.infrastructure.db.models import BaseORM
-from src.infrastructure.db.models.product import ProductORM
 
 
-class OrderItemORM(BaseORM[OrderItem]):
+class OrderItemORM(BaseORM[OrderItem], table=True):
     __tablename__ = "order_items"
 
     id: int = Field(primary_key=True)
@@ -25,9 +24,10 @@ class OrderItemORM(BaseORM[OrderItem]):
         )
     )
 
-    product: ProductORM = Relationship(
+    product: "ProductORM" = Relationship(
         sa_relationship=relationship(
             "ProductORM",
+            back_populates="order_items",
             lazy="selectin",
         )
     )

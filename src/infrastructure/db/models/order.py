@@ -1,15 +1,15 @@
 from __future__ import annotations
 
 from datetime import date
-from sqlmodel import Field, Relationship
+
 from sqlalchemy.orm import relationship
+from sqlmodel import Field, Relationship
 
 from src.domain.entities.order import Order
 from src.infrastructure.db.models import BaseORM
-from src.infrastructure.db.models.customer import CustomerORM
 
 
-class OrderORM(BaseORM[Order]):
+class OrderORM(BaseORM[Order], table=True):
     __tablename__ = "orders"
 
     id: int = Field(primary_key=True)
@@ -17,7 +17,7 @@ class OrderORM(BaseORM[Order]):
     status: str
     customer_id: int = Field(foreign_key="customers.id")
 
-    customer: CustomerORM = Relationship(
+    customer: "CustomerORM" = Relationship(
         sa_relationship=relationship(
             "CustomerORM",
             back_populates="orders",
@@ -30,6 +30,7 @@ class OrderORM(BaseORM[Order]):
             "OrderItemORM",
             back_populates="order",
             lazy="selectin",
+            cascade="all, delete-orphan",
         )
     )
 
@@ -50,4 +51,3 @@ class OrderORM(BaseORM[Order]):
             order_date=entity.order_date,
             status=entity.status,
         )
-

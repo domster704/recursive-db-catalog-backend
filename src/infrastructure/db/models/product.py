@@ -5,10 +5,9 @@ from sqlmodel import Field, Relationship
 
 from src.domain.entities.product import Product
 from src.infrastructure.db.models import BaseORM
-from src.infrastructure.db.models.category import CategoryORM
 
 
-class ProductORM(BaseORM[Product]):
+class ProductORM(BaseORM[Product], table=True):
     __tablename__ = "products"
 
     id: int = Field(primary_key=True, nullable=False)
@@ -17,7 +16,7 @@ class ProductORM(BaseORM[Product]):
     price: float
     category_id: int = Field(foreign_key="categories.id")
 
-    category: CategoryORM = Relationship(
+    category: "CategoryORM" = Relationship(
         sa_relationship=relationship(
             "CategoryORM",
             back_populates="products",

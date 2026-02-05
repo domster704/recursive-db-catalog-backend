@@ -11,5 +11,5 @@ poetry install
 Далее
 
 ```bash
-poetry run alembic upgrade HEAD
+poetry run alembic upgrade head
 ```
