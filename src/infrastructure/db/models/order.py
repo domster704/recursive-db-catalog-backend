@@ -1,0 +1,53 @@
+from __future__ import annotations
+
+from datetime import date
+from sqlmodel import Field, Relationship
+from sqlalchemy.orm import relationship
+
+from src.domain.entities.order import Order
+from src.infrastructure.db.models import BaseORM
+from src.infrastructure.db.models.customer import CustomerORM
+
+
+class OrderORM(BaseORM[Order]):
+    __tablename__ = "orders"
+
+    id: int = Field(primary_key=True)
+    order_date: date
+    status: str
+    customer_id: int = Field(foreign_key="customers.id")
+
+    customer: CustomerORM = Relationship(
+        sa_relationship=relationship(
+            "CustomerORM",
+            back_populates="orders",
+            lazy="selectin",
+        )
+    )
+
+    items: list["OrderItemORM"] = Relationship(
+        sa_relationship=relationship(
+            "OrderItemORM",
+            back_populates="order",
+            lazy="selectin",
+        )
+    )
+
+    def to_entity(self) -> Order:
+        return Order(
+            id=self.id,
+            customer=self.customer.to_entity(),
+            order_date=self.order_date,
+            status=self.status,
+            items=[item.to_entity() for item in self.items],
+        )
+
+    @classmethod
+    def from_entity(cls, entity: Order) -> OrderORM:
+        return cls(
+            id=entity.id,
+            customer_id=entity.customer.id,
+            order_date=entity.order_date,
+            status=entity.status,
+        )
+
