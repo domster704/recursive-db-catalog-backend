@@ -200,11 +200,27 @@ ORDERS = [
         ],
     },
     {
+        "customer": "Иван Иванов",
+        "order_date": date(2026, 1, 12),
+        "status": "paid",
+        "items": [
+            ("Samsung Galaxy S24 Ultra", 1),
+        ],
+    },
+    {
         "customer": "Пётр Петров",
         "order_date": date(2025, 12, 22),
         "status": "paid",
         "items": [
             ("Apple iPhone 15 Pro 256GB", 2),
+        ],
+    },
+    {
+        "customer": "Пётр Петров",
+        "order_date": date(2026, 2, 3),
+        "status": "delivered",
+        "items": [
+            ("15.6\" Ноутбук Apple MacBook Pro M2", 1),
         ],
     },
     {
@@ -214,6 +230,66 @@ ORDERS = [
         "items": [
             ("Игровой ПК Ryzen 7 / RTX 4070", 1),
             ("Офисный ПК Intel i5 / 16GB RAM", 3),
+        ],
+    },
+    {
+        "customer": "ООО ТехноМир",
+        "order_date": date(2026, 1, 25),
+        "status": "paid",
+        "items": [
+            ('65" Телевизор Samsung QE65Q60AAU', 2),
+            ("Samsung Galaxy S24 Ultra", 5),
+        ],
+    },
+    {
+        "customer": "АО СеверСофт",
+        "order_date": date(2026, 1, 10),
+        "status": "paid",
+        "items": [
+            ("Samsung Galaxy S24 Ultra", 10),
+            ("Apple iPhone 15 Pro 256GB", 5),
+        ],
+    },
+    {
+        "customer": "АО СеверСофт",
+        "order_date": date(2026, 2, 1),
+        "status": "shipped",
+        "items": [
+            ('17.3" Ноутбук ASUS TUF Gaming F17', 10),
+            ("Офисный ПК Intel i5 / 16GB RAM", 10),
+        ],
+    },
+    {
+        "customer": "ООО Ромашка",
+        "order_date": date(2026, 1, 18),
+        "status": "created",
+        "items": [
+            ("Холодильник Samsung RS63R5587SL", 1),
+        ],
+    },
+    {
+        "customer": "ООО Ромашка",
+        "order_date": date(2026, 2, 5),
+        "status": "cancelled",
+        "items": [
+            ("Стиральная машина Bosch WLT24460OE", 2),
+        ],
+    },
+    {
+        "customer": "Сидоров Сергей",
+        "order_date": date(2026, 1, 30),
+        "status": "paid",
+        "items": [
+            ("Стиральная машина Bosch WLT24460OE", 1),
+            ("Холодильник с морозильником LG GA-B509MQSL белый", 1),
+        ],
+    },
+    {
+        "customer": "Сидоров Сергей",
+        "order_date": date(2026, 2, 10),
+        "status": "delivered",
+        "items": [
+            ('65" Телевизор Samsung QE65Q60AAU', 1),
         ],
     },
 ]
@@ -272,7 +348,6 @@ async def seed_initial_data():
                 await customer_repo.add(customer)
 
         existing_products = await product_repo.get_all()
-        print(existing_products)
         if not existing_products:
             for item in PRODUCTS:
                 product = item["product"]

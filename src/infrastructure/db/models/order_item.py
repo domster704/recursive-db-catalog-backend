@@ -11,7 +11,7 @@ class OrderItemORM(BaseORM[OrderItem], table=True):
     __tablename__ = "order_items"
 
     id: int = Field(primary_key=True)
-    order_id: int = Field(foreign_key="orders.id")
+    order_id: int = Field(foreign_key="orders.id", ondelete="CASCADE")
     product_id: int = Field(foreign_key="products.id")
     quantity: int
     price: float
