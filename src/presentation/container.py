@@ -1,6 +1,5 @@
 from contextlib import asynccontextmanager
 
-import uvicorn
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
@@ -27,4 +26,3 @@ def create_app() -> FastAPI:
     )
     app.include_router(api_v1_router)
     return app
-

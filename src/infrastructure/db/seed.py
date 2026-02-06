@@ -220,7 +220,7 @@ ORDERS = [
         "order_date": date(2026, 2, 3),
         "status": "delivered",
         "items": [
-            ("15.6\" Ноутбук Apple MacBook Pro M2", 1),
+            ('15.6" Ноутбук Apple MacBook Pro M2', 1),
         ],
     },
     {
@@ -296,10 +296,10 @@ ORDERS = [
 
 
 async def create_category_tree(
-        repo: CategoryRepository,
-        tree: dict[str, dict],
-        parent: Category | None,
-        cache: dict[str, Category] | None = None,
+    repo: CategoryRepository,
+    tree: dict[str, dict],
+    parent: Category | None,
+    cache: dict[str, Category] | None = None,
 ) -> None:
     if cache is None:
         cache = {}

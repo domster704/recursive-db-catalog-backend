@@ -1,4 +1,14 @@
 services:
+  backend:
+    build: .
+    container_name: backend
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_HOST=postgres
+    ports:
+      - "8000:8000"
+
   postgres:
     image: postgres:18
     container_name: postgres
@@ -13,7 +23,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
       interval: 10s
       timeout: 5s
       retries: 5

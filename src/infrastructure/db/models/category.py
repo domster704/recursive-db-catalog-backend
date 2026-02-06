@@ -13,9 +13,7 @@ class CategoryORM(BaseORM[Category], table=True):
     id: int = Field(primary_key=True)
     name: str
     parent_id: int | None = Field(
-        foreign_key="categories.id",
-        nullable=True,
-        ondelete="CASCADE"
+        foreign_key="categories.id", nullable=True, ondelete="CASCADE"
     )
 
     parent: CategoryORM | None = Relationship(

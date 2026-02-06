@@ -1,0 +1,8 @@
+.idea
+migrations
+alembic
+alembic.ini
+sql
+.env.example
+.gitignore
+README.md

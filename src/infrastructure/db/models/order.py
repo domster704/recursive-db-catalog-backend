@@ -31,7 +31,7 @@ class OrderORM(BaseORM[Order], table=True):
             back_populates="order",
             lazy="selectin",
             cascade="all, delete-orphan",
-            passive_deletes=True
+            passive_deletes=True,
         )
     )
 

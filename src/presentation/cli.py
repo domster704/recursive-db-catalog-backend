@@ -12,4 +12,3 @@ def seed():
     typer.echo("Seeding database...")
     asyncio.run(seed_initial_data())
     typer.echo("Done")
-
