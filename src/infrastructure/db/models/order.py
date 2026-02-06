@@ -14,7 +14,7 @@ class OrderORM(BaseORM[Order], table=True):
 
     id: int = Field(primary_key=True)
     order_date: date
-    status: str
+    status: str  # Можно сделать enum, но для тестового задания проще просто строки: created, paid, delivered, shipped, cancelled
     customer_id: int = Field(foreign_key="customers.id")
 
     customer: "CustomerORM" = Relationship(
