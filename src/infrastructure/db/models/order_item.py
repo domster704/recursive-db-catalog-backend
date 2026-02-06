@@ -3,7 +3,7 @@ from __future__ import annotations
 from sqlmodel import Field, Relationship
 from sqlalchemy.orm import relationship
 
-from src.domain.entities.order_item import OrderItem
+from src.domain.entities.order import OrderItem
 from src.infrastructure.db.models import BaseORM
 
 
@@ -37,6 +37,7 @@ class OrderItemORM(BaseORM[OrderItem], table=True):
             id=self.id,
             product=self.product.to_entity(),
             quantity=self.quantity,
+            order=self.order,
             price=self.price,
         )
 
@@ -44,6 +45,7 @@ class OrderItemORM(BaseORM[OrderItem], table=True):
     def from_entity(cls, entity: OrderItem) -> OrderItemORM:
         return cls(
             id=entity.id,
+            order_id=entity.order.id,
             product_id=entity.product.id,
             quantity=entity.quantity,
             price=entity.price,

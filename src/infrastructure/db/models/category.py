@@ -49,7 +49,7 @@ class CategoryORM(BaseORM[Category], table=True):
         return Category(
             id=self.id,
             name=self.name,
-            parent=self.parent.to_entity() if self.parent else None,
+            parent=self.parent.to_entity() if "parent" in self.__dict__ else None,
         )
 
     @classmethod

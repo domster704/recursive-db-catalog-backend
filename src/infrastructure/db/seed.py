@@ -1,8 +1,13 @@
+from datetime import date
+
 from src.domain.entities.category import Category
 from src.domain.entities.customer import Customer
+from src.domain.entities.order import Order, OrderItem
 from src.domain.entities.product import Product
 from src.infrastructure.db.repositories.category import CategoryRepository
 from src.infrastructure.db.repositories.customer import CustomerRepository
+from src.infrastructure.db.repositories.order import OrderRepository
+from src.infrastructure.db.repositories.order_item import OrderItemRepository
 from src.infrastructure.db.repositories.product import ProductRepository
 from src.infrastructure.db.uow import UnitOfWork
 
@@ -184,6 +189,35 @@ PRODUCTS = [
     },
 ]
 
+ORDERS = [
+    {
+        "customer": "Иван Иванов",
+        "order_date": date(2025, 12, 20),
+        "status": "created",
+        "items": [
+            ("Стиральная машина LG F1296HDS3 белый", 1),
+            ('55" Телевизор LG OLED55C2', 1),
+        ],
+    },
+    {
+        "customer": "Пётр Петров",
+        "order_date": date(2025, 12, 22),
+        "status": "paid",
+        "items": [
+            ("Apple iPhone 15 Pro 256GB", 2),
+        ],
+    },
+    {
+        "customer": "ООО ТехноМир",
+        "order_date": date(2026, 1, 5),
+        "status": "shipped",
+        "items": [
+            ("Игровой ПК Ryzen 7 / RTX 4070", 1),
+            ("Офисный ПК Intel i5 / 16GB RAM", 3),
+        ],
+    },
+]
+
 
 async def create_category_tree(
         repo: CategoryRepository,
@@ -219,6 +253,8 @@ async def seed_initial_data():
         category_repo = CategoryRepository(uow)
         customer_repo = CustomerRepository(uow)
         product_repo = ProductRepository(uow)
+        order_repo = OrderRepository(uow)
+        order_item_repo = OrderItemRepository(uow)
 
         existing_categories = await category_repo.get_all()
         if not existing_categories:
@@ -236,6 +272,7 @@ async def seed_initial_data():
                 await customer_repo.add(customer)
 
         existing_products = await product_repo.get_all()
+        print(existing_products)
         if not existing_products:
             for item in PRODUCTS:
                 product = item["product"]
@@ -249,3 +286,38 @@ async def seed_initial_data():
                 )
 
                 await product_repo.add(product)
+
+        existing_orders = await order_repo.get_all()
+        if not existing_orders:
+            customers = {c.name: c for c in await customer_repo.get_all()}
+            products = {p.name: p for p in await product_repo.get_all()}
+
+            for order_data in ORDERS:
+                customer = customers[order_data["customer"]]
+
+                order = Order(
+                    customer=customer,
+                    order_date=order_data["order_date"],
+                    status=order_data["status"],
+                    items=[],
+                )
+
+                order = await order_repo.add(order)
+
+                for product_name, quantity in order_data["items"]:
+                    product = products[product_name]
+
+                    item = OrderItem(
+                        product=product,
+                        quantity=quantity,
+                        price=product.price,
+                        order=order,
+                    )
+
+                    item = await order_item_repo.add(item, commit=False)
+                    item.product = product
+                    item.order = order
+
+                    order.items.append(item)
+
+                await uow.commit()
