@@ -1,4 +1,4 @@
-# AitiGuru test task
+# Recursive database catalog backend
 
 ## Начало
 
